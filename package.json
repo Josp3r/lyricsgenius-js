@@ -1,0 +1,52 @@
+{
+  "name": "lyricsgenius-js",
+  "version": "1.0.0",
+  "description": "A TypeScript/Node.js client for the Genius.com API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node bin/cli.js",
+    "dev": "tsc --watch",
+    "test": "echo \"Please use 'npm run doctor' for testing\"",
+    "doctor": "node bin/cli.js doctor",
+    "example:basic": "node examples/basic-search.js",
+    "example:artist": "node examples/artist-search.js",
+    "example:proxy": "node examples/proxy-config.js",
+    "prepublishOnly": "npm run build"
+  },
+  "bin": {
+    "lyricsgenius": "./bin/cli.js"
+  },
+  "keywords": [
+    "genius",
+    "lyrics",
+    "api",
+    "music",
+    "songs",
+    "artists",
+    "albums"
+  ],
+  "author": "JEE2US",
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.1",
+  "files": [
+    "dist/**/*",
+    "bin/**/*"
+  ],
+  "dependencies": {
+    "@types/inquirer": "^9.0.9",
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0",
+    "commander": "^14.0.0",
+    "inquirer": "^12.9.4",
+    "socks-proxy-agent": "^8.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
