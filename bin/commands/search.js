@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import { Genius } from '../../dist/index.js';
-import { getAccessToken } from '../utils/config.js';
+import { getAccessToken, loadConfig, resolveOutputPath } from '../utils/config.js';
 import { downloadSong } from '../utils/download.js';
 
 export function setupSearchCommand(program) {
@@ -79,13 +79,25 @@ export function setupSearchCommand(program) {
         const selectedSong = songAnswer.selectedSong;
         console.log(`\n📥 Preparing to download: ${selectedSong.title} by ${selectedSong.artist}`);
 
+        // Load config to check for outputPath template
+        const config = loadConfig();
+        let defaultDir = './lyricsgenius';
+        let promptMessage = 'Enter download directory (press Enter for default: ./lyricsgenius):';
+        
+        if (config.outputPath) {
+          // Resolve template with selected song data
+          const resolvedPath = resolveOutputPath(config.outputPath, selectedSong);
+          defaultDir = resolvedPath;
+          promptMessage = `Enter download directory (press Enter for configured: ${resolvedPath}):`;
+        }
+
         // Ask for download directory
         const dirAnswer = await inquirer.prompt([
           {
             type: 'input',
             name: 'downloadDir',
-            message: 'Enter download directory (press Enter for default: ./lyricsgenius):',
-            default: './lyricsgenius'
+            message: promptMessage,
+            default: defaultDir
           }
         ]);
 
@@ -105,11 +117,17 @@ export function setupSearchCommand(program) {
 
         // Download the song
         console.log(`\n📥 Downloading lyrics...`);
+        
+        // Check if we should skip adding artist directory
+        // If the user accepted the template-resolved path, don't add artist subdir
+        const shouldSkipArtistDir = config.outputPath && (dirAnswer.downloadDir === defaultDir);
+        
         const result = await downloadSong(
           genius, 
           selectedSong.id, 
           dirAnswer.downloadDir,
-          formatAnswer.format
+          formatAnswer.format,
+          shouldSkipArtistDir
         );
 
         if (result) {

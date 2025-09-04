@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import { sanitizeFilename } from './helpers.js';
 
 const configDir = path.join(os.homedir(), '.lyricsgenius');
 const configFile = path.join(configDir, 'config.json');
@@ -18,14 +19,30 @@ function ensureConfigDir() {
 }
 
 export function loadConfig() {
+  let config = {};
+  
+  // Load global config from ~/.lyricsgenius/config.json
   try {
     if (fs.existsSync(configFile)) {
-      return JSON.parse(fs.readFileSync(configFile, 'utf8'));
+      config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
     }
   } catch (error) {
-    console.error('Error loading config:', error.message);
+    console.error('Error loading global config:', error.message);
   }
-  return {};
+  
+  // Load local config from lyricsgenius.config.json in current working directory
+  const localConfigFile = path.join(process.cwd(), 'lyricsgenius.config.json');
+  try {
+    if (fs.existsSync(localConfigFile)) {
+      const localConfig = JSON.parse(fs.readFileSync(localConfigFile, 'utf8'));
+      // Merge local config with global config (local takes precedence)
+      config = { ...config, ...localConfig, accessToken: localConfig.accessToken || config.accessToken };
+    }
+  } catch (error) {
+    console.error('Error loading local config (lyricsgenius.config.json):', error.message);
+  }
+  
+  return config;
 }
 
 export function saveConfig(config) {
@@ -49,6 +66,14 @@ export async function getAccessToken() {
   
   console.log('No access token found. Please run "lyricsgenius init" first.');
   process.exit(1);
+}
+
+export function resolveOutputPath(outputPathTemplate, songData) {
+  if (!outputPathTemplate) {
+    return null;
+  }
+
+  return outputPathTemplate.replace('{{artist}}', sanitizeFilename(songData.artist || 'Unknown Artist'));
 }
 
 export { configFile };

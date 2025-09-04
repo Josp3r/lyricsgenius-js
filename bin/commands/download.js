@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Genius } from '../../dist/index.js';
-import { getAccessToken } from '../utils/config.js';
+import { getAccessToken, loadConfig, resolveOutputPath } from '../utils/config.js';
 import { downloadSong } from '../utils/download.js';
 
 export function setupDownloadCommand(program) {
@@ -47,14 +47,25 @@ export function setupDownloadCommand(program) {
               output = `${song.title} - ${song.artist}\n${'='.repeat(50)}\n\n${song.lyrics}`;
             }
 
+            // Check if this is a template path
+            const config = loadConfig();
+            let finalOutputPath = outputPath;
+            if (config.outputPath && !options.output) {
+              // If no command line output specified, but we have a template, use it
+              finalOutputPath = resolveOutputPath(config.outputPath, song);
+              if (!path.extname(finalOutputPath)) {
+                finalOutputPath = path.join(finalOutputPath, path.basename(outputPath));
+              }
+            }
+
             // Ensure parent directory exists
-            const parentDir = path.dirname(outputPath);
+            const parentDir = path.dirname(finalOutputPath);
             if (!fs.existsSync(parentDir)) {
               fs.mkdirSync(parentDir, { recursive: true });
             }
 
-            fs.writeFileSync(outputPath, output, 'utf8');
-            console.log(`💾 Lyrics saved to: ${outputPath}`);
+            fs.writeFileSync(finalOutputPath, output, 'utf8');
+            console.log(`💾 Lyrics saved to: ${finalOutputPath}`);
             return;
           } else {
             // Use as directory

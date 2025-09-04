@@ -23,6 +23,7 @@ yarn-error.log*
 .env.*
 .genius-token
 genius-config.json
+lyricsgenius.config.json
 
 # Test artifacts
 *.json.bak

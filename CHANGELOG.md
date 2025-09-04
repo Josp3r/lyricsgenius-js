@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-09-04
+
+### Added
+
+- **Project Configuration Support**: Local configuration via `lyricsgenius.config.json`
+  - Create project-specific configuration files in current working directory
+  - Local configuration takes precedence over global `~/.lyricsgenius/config.json`
+  - Supports all configuration options including `accessToken` and `outputPath`
+- **Template-based Output Paths**: Configurable download paths with variable substitution
+  - `outputPath` configuration option with `{{artist}}` template variable
+  - Automatic path sanitization for file system compatibility
+  - Smart path resolution prevents duplicate artist directories
+- **Enhanced CLI Download Experience**: Template-aware download path suggestions
+  - Search command displays resolved template paths as defaults
+  - Automatic detection and handling of template vs custom paths
+  - Improved user prompts showing configured vs default paths
+- **Enhanced Init Command**: Smart local configuration creation
+  - Interactive choice between global and local configuration storage
+  - Automatic detection and use of `lyricsgenius.config.json.example` as template
+  - Preserves existing configuration structure while updating access token
+  - Example configuration file included in package for easy project setup
+
+### Changed
+
+- **Configuration System**: Enhanced to support both global and local configuration files
+- **Download Logic**: Improved path resolution to avoid directory duplication when using templates
+- **Init Command**: Now offers choice between global and local configuration storage with template support
+
 ## [1.0.2] - 2025-09-04
 
 ### Added

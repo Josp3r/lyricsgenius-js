@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name('lyricsgenius')
   .description('A Node.js client for the Genius.com API')
-  .version('1.0.2');
+  .version('1.0.3');
 
 // Setup commands
 setupInitCommand(program);

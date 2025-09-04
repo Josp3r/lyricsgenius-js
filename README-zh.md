@@ -36,7 +36,41 @@ lyricsgenius init
 lyricsgenius init
 ```
 
-设置你的 API token 并保存到 `~/.lyricsgenius/config.json`
+**交互式设置流程：**
+1. 🔑 输入你的 Genius API token
+2. 📍 选择配置位置：
+   - **全局**（默认）：保存到 `~/.lyricsgenius/config.json`
+   - **本地**：在当前目录创建 `lyricsgenius.config.json`
+
+**智能本地配置：**
+- 如果存在 `lyricsgenius.config.json.example`，会将其用作模板
+- 自动插入你的token，同时保留其他设置
+- 适合具有自定义 `outputPath` 模板的项目特定配置
+
+### 项目特定配置
+
+你可以通过两种方式创建本地配置：
+
+**方式1：使用init命令（推荐）**
+```bash
+lyricsgenius init
+# 当询问本地配置时选择"是"
+```
+
+**方式2：手动创建**
+在项目目录中创建 `lyricsgenius.config.json` 文件：
+
+```json
+{
+  "outputPath": "./music/{{artist}}/albums",
+  "accessToken": "your_token_here"
+}
+```
+
+**模板变量：**
+- `{{artist}}` - 艺术家名称（已为文件系统清理）
+
+本地配置的优先级高于全局配置。
 
 ### 交互式搜索和下载
 
@@ -53,9 +87,11 @@ lyricsgenius search "Hello" -l 20
 
 1. 🔍 搜索显示歌曲列表
 2. 📋 从交互菜单中选择歌曲
-3. 📁 选择下载目录
+3. 📁 选择下载目录（支持模板感知的默认值）
 4. 📄 选择格式（txt 或 json）
 5. 🎉 自动下载并创建有序的文件夹结构
+
+CLI 会自动检测当前目录中的 `lyricsgenius.config.json` 文件，并使用 `outputPath` 模板作为默认下载位置。
 
 ### 直接下载
 
@@ -229,6 +265,8 @@ npm run example:proxy
 ## 功能特性
 
 - **交互式 CLI**：现代命令行界面，支持交互菜单和快捷键
+- **项目配置**：本地 `lyricsgenius.config.json` 文件，支持基于模板的输出路径
+- **模板变量**：使用 `{{artist}}` 变量自定义下载路径
 - **TypeScript 支持**：为 TypeScript 项目提供完整的类型定义
 - **基于 Promise 的 API**：现代 async/await 语法
 - **可配置**：广泛的选项用于自定义行为

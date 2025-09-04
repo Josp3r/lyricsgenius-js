@@ -32,7 +32,41 @@ The package includes a powerful CLI tool with several commands and convenient al
 ```bash
 lyricsgenius init
 ```
-Sets up your API token and saves it to `~/.lyricsgenius/config.json`
+**Interactive Setup Process:**
+1. 🔑 Enter your Genius API token
+2. 📍 Choose configuration location:
+   - **Global** (default): Saves to `~/.lyricsgenius/config.json`
+   - **Local**: Creates `lyricsgenius.config.json` in current directory
+
+**Smart Local Configuration:**
+- If `lyricsgenius.config.json.example` exists, it's used as a template
+- Your token is automatically inserted while preserving other settings
+- Perfect for project-specific configurations with custom `outputPath` templates
+
+### Project-specific Configuration
+
+You can create local configuration in two ways:
+
+**Method 1: Using init command (Recommended)**
+```bash
+lyricsgenius init
+# Choose "Yes" when asked about local configuration
+```
+
+**Method 2: Manual creation**
+Create a `lyricsgenius.config.json` file in your project directory:
+
+```json
+{
+  "outputPath": "./music/{{artist}}/albums",
+  "accessToken": "your_token_here"
+}
+```
+
+**Template Variables:**
+- `{{artist}}` - Artist name (sanitized for file system)
+
+The local configuration takes precedence over global configuration.
 
 ### Interactive Search and Download
 ```bash
@@ -47,9 +81,11 @@ lyricsgenius search "Hello" -l 20
 **Interactive Experience:**
 1. 🔍 Search shows a list of songs
 2. 📋 Select a song from the interactive menu
-3. 📁 Choose download directory
+3. 📁 Choose download directory (with template-aware defaults)
 4. 📄 Select format (txt or json)
 5. 🎉 Automatic download with organized folder structure
+
+The CLI automatically detects `lyricsgenius.config.json` in your current directory and uses the `outputPath` template for default download locations.
 
 ### Direct Download
 ```bash
@@ -216,6 +252,8 @@ Or check the `examples/` directory for code samples.
 ## Features
 
 - **Interactive CLI**: Modern command-line interface with interactive menus and shortcuts
+- **Project Configuration**: Local `lyricsgenius.config.json` with template-based output paths
+- **Template Variables**: Customize download paths with `{{artist}}` variables
 - **TypeScript Support**: Complete type definitions for TypeScript projects
 - **Promise-based API**: Modern async/await syntax
 - **Configurable**: Extensive options for customizing behavior

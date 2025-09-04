@@ -1,6 +1,6 @@
 {
   "name": "lyricsgenius-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Node.js client for the Genius.com API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,6 +32,7 @@
   "files": [
     "dist/**/*",
     "bin/**/*",
+    "examples/**/*",
     "README.md",
     "README-zh.md",
     "CHANGELOG.md",
