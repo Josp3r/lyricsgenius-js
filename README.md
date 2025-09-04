@@ -1,8 +1,10 @@
 # lyricsgenius-js
 
-A TypeScript/Node.js client for the Genius.com API 🎶🎤
+A Node.js client for the Genius.com API 🎶🎤
 
-This is a TypeScript port of the popular Python [lyricsgenius](https://github.com/johnwmillr/LyricsGenius) library, providing access to song lyrics, artist information, and albums from Genius.com.
+**[中文版 README](./README-zh.md)**
+
+This is a Node.js port of the popular Python [lyricsgenius](https://github.com/johnwmillr/LyricsGenius) library, providing access to song lyrics, artist information, and albums from Genius.com.
 
 ## Quick Start
 
@@ -24,7 +26,7 @@ lyricsgenius init
 
 ## CLI Usage
 
-The package includes a powerful CLI tool with several commands:
+The package includes a powerful CLI tool with several commands and convenient aliases:
 
 ### Initialize Configuration
 ```bash
@@ -32,28 +34,31 @@ lyricsgenius init
 ```
 Sets up your API token and saves it to `~/.lyricsgenius/config.json`
 
-### Search
+### Interactive Search and Download
 ```bash
-# Search for songs (default)
+# Interactive search with song selection and download
 lyricsgenius search "Shape of You"
+lyricsgenius s "Shape of You"  # Short alias
 
-# Search for artists
-lyricsgenius search -t artist "Ed Sheeran" -l 5
-
-# Search for albums  
-lyricsgenius search -t album "Divide" -l 3
+# Customize number of results
+lyricsgenius search "Hello" -l 20
 ```
 
-### Download Lyrics
+**Interactive Experience:**
+1. 🔍 Search shows a list of songs
+2. 📋 Select a song from the interactive menu
+3. 📁 Choose download directory
+4. 📄 Select format (txt or json)
+5. 🎉 Automatic download with organized folder structure
+
+### Direct Download
 ```bash
-# Download to structured folders: ./lyricsgenius/{artist}/{song}.txt
+# Download specific song by ID
 lyricsgenius download 1234567
+lyricsgenius dl 1234567  # Short alias
 
-# Download to custom location (maintains artist/song structure)
+# Download to custom directory
 lyricsgenius download 1234567 -o ~/Music/
-
-# Download to specific file
-lyricsgenius download 1234567 -o my-song.txt
 
 # Download as JSON format
 lyricsgenius download 1234567 -f json
@@ -62,12 +67,38 @@ lyricsgenius download 1234567 -f json
 ### Diagnostics
 ```bash
 lyricsgenius doctor
+lyricsgenius doc  # Short alias
 ```
 Runs comprehensive tests including:
 - 🔌 API connection testing
 - 🔍 Search functionality verification  
 - 🌐 Proxy configuration testing
 - 🩺 Full system diagnostics
+
+### Command Aliases
+
+All CLI commands support convenient short aliases for faster typing:
+
+| Command | Alias | Description |
+|---------|--------|-------------|
+| `search` | `s` | Interactive search and download |
+| `download` | `dl` | Direct song download by ID |
+| `doctor` | `doc` | Run diagnostic tests |
+| `init` | - | Initialize configuration |
+
+```bash
+# These are equivalent
+lyricsgenius search "hello world"
+lyricsgenius s "hello world"
+
+# These are equivalent  
+lyricsgenius download 12345
+lyricsgenius dl 12345
+
+# These are equivalent
+lyricsgenius doctor
+lyricsgenius doc
+```
 
 ## API Token Setup
 
@@ -92,8 +123,9 @@ const genius = new Genius({ accessToken: 'your_token_here' });
 
 ### Basic Usage
 
-```typescript
+```javascript
 import { Genius } from 'lyricsgenius-js';
+// or: const { Genius } = require('lyricsgenius-js');
 
 // Initialize with access token
 const genius = new Genius({ accessToken: 'your_access_token_here' });
@@ -104,7 +136,7 @@ const genius = new Genius();
 
 ### Search for Songs
 
-```typescript
+```javascript
 // Search for a specific song
 const song = await genius.searchSong('Song Title', 'Artist Name');
 if (song) {
@@ -116,7 +148,7 @@ if (song) {
 
 ### Search for Artists
 
-```typescript
+```javascript
 // Search for an artist and get their songs
 const artist = await genius.searchArtist('Artist Name', 5); // Get 5 songs max
 if (artist) {
@@ -129,7 +161,7 @@ if (artist) {
 
 ### Search for Albums
 
-```typescript
+```javascript
 // Search for an album by ID (album name search no longer supported by API)
 const album = await genius.searchAlbum(12345);
 if (album) {
@@ -143,7 +175,7 @@ if (album) {
 
 ### Configuration Options
 
-```typescript
+```javascript
 const genius = new Genius({
   accessToken: 'your_token',
   verbose: false,                    // Turn off status messages
@@ -183,12 +215,14 @@ Or check the `examples/` directory for code samples.
 
 ## Features
 
-- **Full TypeScript Support**: Complete type definitions for all API responses
+- **Interactive CLI**: Modern command-line interface with interactive menus and shortcuts
+- **TypeScript Support**: Complete type definitions for TypeScript projects
 - **Promise-based API**: Modern async/await syntax
 - **Configurable**: Extensive options for customizing behavior
 - **Rate limiting**: Built-in request throttling and retry logic
 - **OAuth2 Support**: Complete OAuth2 flow implementation
 - **Web scraping**: Lyrics extraction from Genius web pages
+- **Command Aliases**: Short aliases for faster CLI usage
 
 ## API Reference
 
@@ -206,4 +240,8 @@ MIT
 
 ## Contributing
 
-This is a TypeScript port of the Python lyricsgenius library. Issues and pull requests are welcome!
+This is a Node.js port of the Python lyricsgenius library. Issues and pull requests are welcome!
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for a detailed history of changes and new features.

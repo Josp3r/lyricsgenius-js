@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a TypeScript port of the Python `lyricsgenius` library, providing a Node.js client for the Genius.com API. The project includes both a programmatic API and a CLI tool for interacting with song lyrics, artist information, and albums.
+This is a Node.js port of the Python `lyricsgenius` library, providing a Node.js client for the Genius.com API. The project includes both a programmatic API and a CLI tool for interacting with song lyrics, artist information, and albums.
 
 ## Development Commands
 
